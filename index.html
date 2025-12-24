@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>ASTITVA – Interactive Pitch Deck</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;700&family=Cinzel:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+  :root {
+    --amber: #F59E0B;
+    --dark: #111827;
+    --light: #F9FAFB;
+  }
+  
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--light);
+    overflow-x: hidden;
+  }
+  
+  h1, h2, h3 {
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.05em;
+  }
+  
+  .title-kannada {
+    font-family: 'Anton', sans-serif;
+    text-transform: uppercase;
+  }
+  
+  .nav-link.active {
+    color: var(--amber);
+    font-weight: bold;
+  }
+  
+  .story-image-container {
+    position: relative;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    min-height: 280px;
+  }
+  
+  .story-image-container img.loaded {
+    animation: none;
+    background: none;
+  }
+  
+  @keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  
+  .story-image-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  }
+  
+  .story-image {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .story-image.loaded {
+    opacity: 1;
+  }
+  
+  .story-image-container:hover .story-image {
+    transform: scale(1.05);
+  }
+  
+  .image-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+    color: white;
+    padding: 1.5rem;
+  }
+  
+  .section-divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--amber), transparent);
+    margin: 3rem auto;
+    width: 60%;
+  }
+  
+  .pulse-animation {
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0% { opacity: 0.7; }
+    50% { opacity: 1; }
+    100% { opacity: 0.7; }
+  }
+  
+  .budget-card {
+    transition: all 0.3s ease;
+    border-top: 4px solid;
+  }
+  
+  .budget-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
+  
+  .character-card {
+    transition: all 0.3s ease;
+  }
+  
+  .character-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  }
+  
+  .character-img-container {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid;
+    flex-shrink: 0;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+  }
+  
+  .character-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .character-img.loaded {
+    opacity: 1;
+  }
+  
+  /* Animation for title section */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-fadeInUp {
+    animation: fadeInUp 1s ease-out forwards;
+  }
+  
+  .animate-slideInUp {
+    animation: slideInUp 1s ease-out forwards;
+  }
+  
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+  
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+  
+  /* Sidebar Styles */
+  .sidebar-scroll {
+    height: calc(100vh - 180px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #F59E0B #374151;
+  }
+  
+  .sidebar-scroll::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .sidebar-scroll::-webkit-scrollbar-track {
+    background: #374151;
+    border-radius: 10px;
+  }
+  
+  .sidebar-scroll::-webkit-scrollbar-thumb {
+    background-color: #F59E0B;
+    border-radius: 10px;
+  }
+  
+  /* 🔒 CRITICAL FIX: SIDEBAR NEVER SHOWS ON MOBILE */
+  @media (max-width: 1023px) {
+    nav {
+      display: none !important;
+    }
+  }
+  
+  /* Mobile Navigation */
+  .mobile-nav {
+    background: rgba(17, 24, 39, 0.98);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+  }
+  
+  /* Mobile Menu Animation */
+  .mobile-menu-slide {
+    animation: slideInRight 0.3s ease-out forwards;
+  }
+  
+  @keyframes slideInRight {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  
+  /* Mobile styles */
+  @media (max-width: 1024px) {
+    .title-kannada {
+      font-size: 3rem;
+      line-height: 1.2;
+    }
+    
+    .story-image {
+      height: 200px;
+    }
+    
+    .story-image-container {
+      min-height: 200px;
+    }
+    
+    .character-img-container {
+      width: 50px;
+      height: 50px;
+    }
+    
+    .section-divider {
+      width: 80%;
+      margin: 2rem auto;
+    }
+    
+    .budget-card {
+      transform: none !important;
+    }
+    
+    .budget-card:hover {
+      transform: none !important;
+    }
+    
+    /* Fix for main content margin on mobile */
+    main {
+      margin-left: 0 !important;
+      width: 100% !important;
+    }
+    
+    /* Ensure main sections have proper mobile padding */
+    main section:first-child {
+      padding-top: 5rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .title-kannada {
+      font-size: 2.5rem;
+    }
+    
+    .story-image {
+      height: 180px;
+    }
+    
+    .story-image-container {
+      min-height: 180px;
+    }
+    
+    .image-overlay {
+      padding: 1rem;
+    }
+    
+    .image-overlay h4 {
+      font-size: 1.125rem;
+    }
+    
+    .image-overlay p {
+      font-size: 0.75rem;
+    }
+    
+    /* Mobile menu styles */
+    .mobile-menu-open {
+      display: block !important;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.8);
+    }
+    
+    .mobile-menu-content {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 280px;
+      background: #111827;
+      padding: 1.5rem;
+      overflow-y: auto;
+      box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .mobile-menu-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      z-index: 10000;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .title-kannada {
+      font-size: 2.2rem;
+    }
+    
+    .story-image {
+      height: 160px;
+    }
+    
+    .story-image-container {
+      min-height: 160px;
+    }
+    
+    .mobile-menu-content {
+      width: 100%;
+    }
+  }
+  
+  /* Tablet styles */
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .title-kannada {
+      font-size: 5rem;
+    }
+    
+    .story-image {
+      height: 240px;
+    }
+    
+    .story-image-container {
+      min-height: 240px;
+    }
+  }
+  
+  /* Large Desktop styles */
+  @media (min-width: 1440px) {
+    .sidebar-scroll {
+      height: calc(100vh - 200px);
+    }
+  }
+  
+  /* Reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+  
+  /* Touch device optimizations */
+  @media (hover: none) and (pointer: coarse) {
+    .story-image-container:hover {
+      transform: none;
+    }
+    
+    .character-card:hover {
+      transform: none;
+    }
+    
+    .budget-card:hover {
+      transform: none;
+    }
+    
+    /* Larger touch targets for mobile */
+    .nav-link {
+      padding: 12px 8px;
+    }
+    
+    button {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
+</style>
+</head>
+
+<body class="flex flex-col lg:flex-row">
+<!-- MOBILE NAVIGATION -->
+<div class="lg:hidden mobile-nav fixed top-0 left-0 right-0 z-50 p-4 flex justify-between items-center">
+  <h2 class="title-kannada text-xl text-amber-400 font-bold">ಅಸ್ತಿತ್ವ</h2>
+  <button id="mobileMenuToggle" class="text-white p-3 focus:outline-none" aria-label="Open menu">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+    </svg>
+  </button>
+</div>
+
+<!-- MOBILE MENU (Hidden by default) -->
+<div id="mobileMenu" class="lg:hidden mobile-menu-open hidden">
+  <div class="mobile-menu-content mobile-menu-slide">
+    <div class="flex justify-between items-center mb-8">
+      <h2 class="title-kannada text-2xl text-amber-400 font-bold">ಅಸ್ತಿತ್ವ</h2>
+      <button id="mobileMenuClose" class="mobile-menu-close text-white p-2 focus:outline-none" aria-label="Close menu">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+    
+    <ul class="space-y-4">
+      <li><a href="#hook" class="nav-link block py-3 text-lg transition-all duration-300 hover:text-amber-300 border-b border-gray-700">The Hook</a></li>
+      <li><a href="#visual-story" class="nav-link block py-3 text-lg transition-all duration-300 hover:text-amber-300 border-b border-gray-700">Visual Story</a></li>
+      <li><a href="#characters" class="nav-link block py-3 text-lg transition-all duration-300 hover:text-amber-300 border-b border-gray-700">Characters</a></li>
+      <li><a href="#team" class="nav-link block py-3 text-lg transition-all duration-300 hover:text-amber-300 border-b border-gray-700">Creative Team</a></li>
+      <li><a href="#budget" class="nav-link block py-3 text-lg transition-all duration-300 hover:text-amber-300 border-b border-gray-700">Budget</a></li>
+      <li><a href="#vision" class="nav-link block py-3 text-lg transition-all duration-300 hover:text-amber-300 border-b border-gray-700">Vision</a></li>
+      <li><a href="#market" class="nav-link block py-3 text-lg transition-all duration-300 hover:text-amber-300 border-b border-gray-700">Market</a></li>
+      <li><a href="#ask" class="nav-link block py-3 text-lg transition-all duration-300 hover:text-amber-300 border-b border-gray-700">The Ask</a></li>
+    </ul>
+    
+    <div class="mt-12 pt-6 border-t border-gray-700">
+      <p class="text-sm text-gray-400 italic">"Some love changes destiny itself."</p>
+      <p class="text-sm text-gray-500 mt-2">Story by Arjun Nandi</p>
+    </div>
+  </div>
+</div>
+
+<!-- SIDEBAR (Only visible on desktop) -->
+<nav class="hidden lg:flex fixed left-0 top-0 h-screen w-60 bg-gray-900 text-white p-6 z-30 shadow-xl">
+  <div class="w-full">
+    <h2 class="title-kannada text-3xl text-amber-400 font-bold mb-8">ಅಸ್ತಿತ್ವ</h2>
+  
+    <!-- Scrollable navigation -->
+    <div class="sidebar-scroll pr-2">
+      <ul class="space-y-4">
+        <li><a href="#hook" class="nav-link block py-2 px-2 transition-all duration-300 hover:text-amber-300 hover:bg-gray-800 rounded">The Hook</a></li>
+        <li><a href="#visual-story" class="nav-link block py-2 px-2 transition-all duration-300 hover:text-amber-300 hover:bg-gray-800 rounded">Visual Story</a></li>
+        <li><a href="#characters" class="nav-link block py-2 px-2 transition-all duration-300 hover:text-amber-300 hover:bg-gray-800 rounded">Characters</a></li>
+        <li><a href="#team" class="nav-link block py-2 px-2 transition-all duration-300 hover:text-amber-300 hover:bg-gray-800 rounded">Creative Team</a></li>
+        <li><a href="#budget" class="nav-link block py-2 px-2 transition-all duration-300 hover:text-amber-300 hover:bg-gray-800 rounded">Budget</a></li>
+        <li><a href="#vision" class="nav-link block py-2 px-2 transition-all duration-300 hover:text-amber-300 hover:bg-gray-800 rounded">Vision</a></li>
+        <li><a href="#market" class="nav-link block py-2 px-2 transition-all duration-300 hover:text-amber-300 hover:bg-gray-800 rounded">Market</a></li>
+        <li><a href="#ask" class="nav-link block py-2 px-2 transition-all duration-300 hover:text-amber-300 hover:bg-gray-800 rounded">The Ask</a></li>
+      </ul>
+    </div>
+  
+    <div class="absolute bottom-6 left-6 right-6">
+      <p class="text-xs text-gray-400 italic">"Some love changes destiny itself."</p>
+      <p class="text-xs text-gray-500 mt-2">Story by Arjun Nandi</p>
+    </div>
+  </div>
+</nav>
+
+<main class="w-full lg:ml-60 lg:pt-0">
+<!-- HERO SECTION WITH POSTER -->
+<section id="hook" class="relative min-h-screen bg-gray-900 text-white overflow-hidden pt-16 lg:pt-0">
+  <!-- Background Poster -->
+  <div class="absolute inset-0 z-0">
+    <img 
+      src="ASTITVA images/poster.png" 
+      alt="ASTITVA Poster" 
+      class="w-full h-full object-cover"
+      loading="eager"
+    />
+    <!-- Dark cinematic overlay -->
+    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent"></div>
+  </div>
+
+  <!-- Content Wrapper -->
+  <div class="relative z-10 min-h-screen flex flex-col justify-end items-center px-4 sm:px-6 md:px-10">
+    <!-- Bottom Center Title -->
+    <div class="text-center mb-16 w-full px-4">
+      <h1 class="title-kannada text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-amber-400 mb-4 tracking-wider drop-shadow-lg animate-slideInUp">
+        ASTITVA
+      </h1>
+
+      <p class="text-base sm:text-lg md:text-xl text-amber-200 px-2">
+        Story by <span class="font-bold text-white">Arjun Nandi</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- STORY SYNOPSIS -->
+<section class="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 md:px-10 bg-gray-900 text-white">
+  <div class="relative z-10 flex items-center justify-center min-h-screen px-4 sm:px-6 md:px-10 pt-16 lg:pt-0">
+    <div class="max-w-5xl mx-auto text-center mt-auto mb-12 sm:mb-20 px-4">
+      <h1 class="title-kannada text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-amber-400 mb-4 sm:mb-6 tracking-wider drop-shadow-lg animate-slideInUp">ASTITVA</h1>
+      <p class="text-xl sm:text-2xl md:text-3xl lg:text-4xl italic mb-6 sm:mb-8 text-white drop-shadow-lg animate-slideInUp animation-delay-200 px-2">
+        When memory is erased, existence must be reclaimed
+      </p>
+      <div class="mt-6 sm:mt-8 animate-fadeIn animation-delay-400">
+        <p class="text-lg sm:text-xl text-amber-200">Story by <span class="font-bold text-white">Arjun Nandi</span></p>
+      </div>
+      
+      <div class="mt-8 sm:mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-3xl mx-auto animate-fadeIn animation-delay-600">
+        <div class="bg-gray-800/70 p-4 rounded-lg backdrop-blur-sm">
+          <p class="text-amber-300 font-bold text-base sm:text-lg">Romantic</p>
+          <p class="text-xs sm:text-sm text-gray-300">A love that survives memory loss</p>
+        </div>
+        <div class="bg-gray-800/70 p-4 rounded-lg backdrop-blur-sm">
+          <p class="text-amber-300 font-bold text-base sm:text-lg">Suspense</p>
+          <p class="text-xs sm:text-sm text-gray-300">Truth buried, memories erased</p>
+        </div>
+        <div class="bg-gray-800/70 p-4 rounded-lg backdrop-blur-sm">
+          <p class="text-amber-300 font-bold text-base sm:text-lg">Thriller</p>
+          <p class="text-xs sm:text-sm text-gray-300">Justice pursued against all odds</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="max-w-4xl mx-auto px-4">
+    <div class="bg-gray-800/80 backdrop-blur-sm p-6 sm:p-8 rounded-xl shadow-2xl border border-gray-700">
+      <h3 class="text-xl sm:text-2xl mb-4 text-amber-300 text-center">Logline</h3>
+      <p class="text-base sm:text-lg lg:text-xl leading-relaxed text-center">
+        An orphan with no past loses his memory after being framed for a brutal crime. 
+        Years later, love restores his truth, forcing him to confront the powerful men 
+        who erased his identity and buried justice—ultimately reclaiming his existence.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- VISUAL STORY SECTION -->
+<section id="visual-story" class="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 md:px-10 bg-gradient-to-b from-gray-100 to-white">
+  <h2 class="text-3xl sm:text-4xl lg:text-5xl text-center mb-4 text-gray-900">Visual Story Journey</h2>
+  <p class="text-center text-gray-600 max-w-2xl mx-auto mb-8 sm:mb-12 text-sm sm:text-base px-4">
+    Key moments that define the emotional arc of ASTITVA
+  </p>
+  
+  <div class="max-w-7xl mx-auto">
+    <!-- Row 1: Beginning -->
+    <div class="mb-12 sm:mb-16">
+      <h3 class="text-xl sm:text-2xl lg:text-3xl text-gray-800 mb-6 sm:mb-8 text-center">The Beginning: Innocence & Connection</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+        
+        <div class="story-image-container">
+          <img src="ASTITVA images/firstmeetintemple.png" alt="First meeting at temple" class="story-image" loading="lazy">
+          <div class="image-overlay">
+            <h4 class="text-lg sm:text-xl font-bold">First Meeting</h4>
+            <p class="text-xs sm:text-sm mt-2">Arjun gives Danya a toy at the temple, beginning their pure bond</p>
+          </div>
+        </div>
+        
+        <div class="story-image-container">
+          <img src="ASTITVA images/birthadycelebartion.png" alt="Birthday celebration" class="story-image" loading="lazy">
+          <div class="image-overlay">
+            <h4 class="text-lg sm:text-xl font-bold">Danya's Birthday</h4>
+            <p class="text-xs sm:text-sm mt-2">Arjun watches from the shadows as Danya celebrates with family</p>
+          </div>
+        </div>
+        
+        <div class="story-image-container sm:col-span-2 lg:col-span-1">
+          <img src="ASTITVA images/meet the friend.png" alt="Meeting the friend" class="story-image" loading="lazy">
+          <div class="image-overlay">
+            <h4 class="text-lg sm:text-xl font-bold">The Friend</h4>
+            <p class="text-xs sm:text-sm mt-2">Mohit, Arjun's only friend, whose jealousy will become betrayal</p>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    
+    <!-- Row 2: Betrayal -->
+    <div class="mb-12 sm:mb-16">
+      <h3 class="text-xl sm:text-2xl lg:text-3xl text-gray-800 mb-6 sm:mb-8 text-center">The Betrayal: Darkness Descends</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+        
+        <div class="story-image-container">
+          <img src="ASTITVA images/arjun take her to surprice.png" alt="Arjun takes her to surprise" class="story-image" loading="lazy">
+          <div class="image-overlay">
+            <h4 class="text-lg sm:text-xl font-bold">The Trap</h4>
+            <p class="text-xs sm:text-sm mt-2">Mohit lures the couple to a forest, promising a magical temple</p>
+          </div>
+        </div>
+        
+        <div class="story-image-container">
+          <img src="ASTITVA images/attack.png" alt="Attack scene" class="story-image" loading="lazy">
+          <div class="image-overlay">
+            <h4 class="text-lg sm:text-xl font-bold">The Attack</h4>
+            <p class="text-xs sm:text-sm mt-2">Shadows emerge from the darkness as betrayal is revealed</p>
+          </div>
+        </div>
+        
+        <div class="story-image-container sm:col-span-2 lg:col-span-1">
+          <img src="ASTITVA images/villains attack.png" alt="Villains attack" class="story-image" loading="lazy">
+          <div class="image-overlay">
+            <h4 class="text-lg sm:text-xl font-bold">Power Unleashed</h4>
+            <p class="text-xs sm:text-sm mt-2">Rakesh and his powerful friends descend upon them</p>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    
+    <!-- Row 3: Aftermath -->
+    <div class="mb-12 sm:mb-16">
+      <h3 class="text-xl sm:text-2xl lg:text-3xl text-gray-800 mb-6 sm:mb-8 text-center">The Aftermath: Memory & Loss</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+        
+        <div class="story-image-container">
+          <img src="ASTITVA images/enetr the jail.png" alt="Enter the jail" class="story-image" loading="lazy">
+          <div class="image-overlay">
+            <h4 class="text-lg sm:text-xl font-bold">Incarceration</h4>
+            <p class="text-xs sm:text-sm mt-2">Arjun enters prison, framed for a crime he didn't commit</p>
+          </div>
+        </div>
+        
+        <div class="story-image-container">
+          <img src="ASTITVA images/momory test.png" alt="Memory test" class="story-image" loading="lazy">
+          <div class="image-overlay">
+            <h4 class="text-lg sm:text-xl font-bold">Memory Lost</h4>
+            <p class="text-xs sm:text-sm mt-2">Doctors examine Arjun's damaged memory after head trauma</p>
+          </div>
+        </div>
+        
+        <div class="story-image-container sm:col-span-2 lg:col-span-1">
+          <img src="ASTITVA images/in hospital mirror.png" alt="In hospital mirror" class="story-image" loading="lazy">
+          <div class="image-overlay">
+            <h4 class="text-lg sm:text-xl font-bold">Who Am I?</h4>
+            <p class="text-xs sm:text-sm mt-2">Arjun stares at his reflection, a stranger to himself</p>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    
+    <!-- Row 4: Redemption -->
+    <div class="mb-12 sm:mb-16">
+      <h3 class="text-xl sm:text-2xl lg:text-3xl text-gray-800 mb-6 sm:mb-8 text-center">The Redemption: Truth & Justice</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+        
+        <div class="story-image-container">
+          <img src="ASTITVA images/rembering all.png" alt="Remembering all" class="story-image" loading="lazy">
+          <div class="image-overlay">
+            <h4 class="text-lg sm:text-xl font-bold">Memory Returns</h4>
+            <p class="text-xs sm:text-sm mt-2">All at once - Pain. Rage. Love. Loss. The truth floods back</p>
+          </div>
+        </div>
+        
+        <div class="story-image-container">
+          <img src="ASTITVA images/decide to revenge.png" alt="Decide to revenge" class="story-image" loading="lazy">
+          <div class="image-overlay">
+            <h4 class="text-lg sm:text-xl font-bold">Justice, Not Revenge</h4>
+            <p class="text-xs sm:text-sm mt-2">Arjun decides to pursue truth, not vengeance</p>
+          </div>
+        </div>
+        
+        <div class="story-image-container sm:col-span-2 lg:col-span-1">
+          <img src="ASTITVA images/caring her.png" alt="Caring for her" class="story-image" loading="lazy">
+          <div class="image-overlay">
+            <h4 class="text-lg sm:text-xl font-bold">Unwavering Love</h4>
+            <p class="text-xs sm:text-sm mt-2">Arjun stays by Danya's side, caring for her in the hospital</p>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    
+    <!-- Row 5: Resolution -->
+    <div>
+      <h3 class="text-xl sm:text-2xl lg:text-3xl text-gray-800 mb-6 sm:mb-8 text-center">The Resolution: Love Triumphs</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+        
+        <div class="story-image-container">
+          <img src="ASTITVA images/doctor consiling.png" alt="Doctor counseling" class="story-image" loading="lazy">
+          <div class="image-overlay">
+            <h4 class="text-lg sm:text-xl font-bold">Truth Revealed</h4>
+            <p class="text-xs sm:text-sm mt-2">Arjun convinces Danya's parents of the truth</p>
+          </div>
+        </div>
+        
+        <div class="story-image-container">
+          <img src="ASTITVA images/hero and heroine don fall.png" alt="Hero and heroine" class="story-image" loading="lazy">
+          <div class="image-overlay">
+            <h4 class="text-lg sm:text-xl font-bold">Reunion</h4>
+            <p class="text-xs sm:text-sm mt-2">Danya finally opens her eyes to see Arjun beside her</p>
+          </div>
+        </div>
+        
+        <div class="story-image-container sm:col-span-2 lg:col-span-1">
+          <img src="ASTITVA images/final.png" alt="Final scene" class="story-image" loading="lazy">
+          <div class="image-overlay">
+            <h4 class="text-lg sm:text-xl font-bold">New Beginning</h4>
+            <p class="text-xs sm:text-sm mt-2">Love survives everything - even memory loss and death</p>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHARACTERS SECTION -->
+<section id="characters" class="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 md:px-10 bg-gray-900">
+  <h2 class="text-3xl sm:text-4xl lg:text-5xl text-center mb-4 text-white">Key Characters</h2>
+  <p class="text-center text-gray-400 max-w-2xl mx-auto mb-8 sm:mb-12 text-sm sm:text-base px-4">
+    The souls that bring ASTITVA to life
+  </p>
+  
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-6xl mx-auto">
+    
+    <div class="character-card bg-gradient-to-br from-gray-800 to-gray-900 p-4 sm:p-6 rounded-xl border border-amber-900/30">
+      <div class="flex items-center mb-4">
+        <div class="character-img-container border-amber-500">
+          <img src="ASTITVA images/hero.png" alt="Arjun" class="character-img" loading="lazy">
+        </div>
+        <div class="ml-3 sm:ml-4">
+          <h3 class="text-lg sm:text-xl text-amber-300">Arjun</h3>
+          <p class="text-xs sm:text-sm text-gray-400">The Protagonist</p>
+        </div>
+      </div>
+      <p class="text-gray-300 text-xs sm:text-sm">
+        An orphan with no past. Framed, imprisoned, memory erased. A man who rebuilds himself through love and truth. 
+        His journey is from "Who am I?" to reclaiming his existence.
+      </p>
+    </div>
+    
+    <div class="character-card bg-gradient-to-br from-gray-800 to-gray-900 p-4 sm:p-6 rounded-xl border border-pink-900/30">
+      <div class="flex items-center mb-4">
+        <div class="character-img-container border-pink-500">
+          <img src="ASTITVA images/Gemini_Generated_Image_x91qhxx91qhxx91q.png" alt="Danya" class="character-img" loading="lazy">
+        </div>
+        <div class="ml-3 sm:ml-4">
+          <h3 class="text-lg sm:text-xl text-pink-300">Danya</h3>
+          <p class="text-xs sm:text-sm text-gray-400">The Soul</p>
+        </div>
+      </div>
+      <p class="text-gray-300 text-xs sm:text-sm">
+        Innocent, loving, and strong. Her suffering becomes the emotional soul of the story. 
+        Even in a coma, her presence anchors Arjun's reality. Love is her resistance.
+      </p>
+    </div>
+    
+    <div class="character-card bg-gradient-to-br from-gray-800 to-gray-900 p-4 sm:p-6 rounded-xl border border-red-900/30">
+      <div class="flex items-center mb-4">
+        <div class="character-img-container border-red-600">
+          <div class="w-full h-full bg-gray-700 flex items-center justify-center">
+            <span class="text-white font-bold">M</span>
+          </div>
+        </div>
+        <div class="ml-3 sm:ml-4">
+          <h3 class="text-lg sm:text-xl text-red-300">Mohit</h3>
+          <p class="text-xs sm:text-sm text-gray-400">The Betrayer</p>
+        </div>
+      </div>
+      <p class="text-gray-300 text-xs sm:text-sm">
+        Arjun's only friend. Consumed by jealousy over Danya's love for Arjun. 
+        Betrayal disguised as loyalty. His actions set the tragic events in motion.
+      </p>
+    </div>
+    
+    <div class="character-card bg-gradient-to-br from-gray-800 to-gray-900 p-4 sm:p-6 rounded-xl border border-purple-900/30">
+      <div class="flex items-center mb-4">
+        <div class="character-img-container border-purple-600">
+          <div class="w-full h-full bg-gray-700 flex items-center justify-center">
+            <span class="text-white font-bold">R</span>
+          </div>
+        </div>
+        <div class="ml-3 sm:ml-4">
+          <h3 class="text-lg sm:text-xl text-purple-300">Rakesh</h3>
+          <p class="text-xs sm:text-sm text-gray-400">The Power</p>
+        </div>
+      </div>
+      <p class="text-gray-300 text-xs sm:text-sm">
+        Son of political power. Represents arrogance, entitlement, and unchecked authority. 
+        Believes the world exists only to serve him and his friends.
+      </p>
+    </div>
+    
+    <div class="character-card bg-gradient-to-br from-gray-800 to-gray-900 p-4 sm:p-6 rounded-xl border border-blue-900/30">
+      <div class="flex items-center mb-4">
+        <div class="character-img-container border-blue-600">
+          <div class="w-full h-full bg-gray-700 flex items-center justify-center">
+            <span class="text-white font-bold">A</span>
+          </div>
+        </div>
+        <div class="ml-3 sm:ml-4">
+          <h3 class="text-lg sm:text-xl text-blue-300">Arun</h3>
+          <p class="text-xs sm:text-sm text-gray-400">The Corruption</p>
+        </div>
+      </div>
+      <p class="text-gray-300 text-xs sm:text-sm">
+        Son of police power. Law turned shield for crime. Uses his family's influence 
+        to manipulate evidence and ensure the false narrative stands.
+      </p>
+    </div>
+    
+    <div class="character-card bg-gradient-to-br from-gray-800 to-gray-900 p-4 sm:p-6 rounded-xl border border-green-900/30">
+      <div class="flex items-center mb-4">
+        <div class="character-img-container border-green-600">
+          <div class="w-full h-full bg-gray-700 flex items-center justify-center">
+            <span class="text-white font-bold">D</span>
+          </div>
+        </div>
+        <div class="ml-3 sm:ml-4">
+          <h3 class="text-lg sm:text-xl text-green-300">Danush</h3>
+          <p class="text-xs sm:text-sm text-gray-400">The Privilege</p>
+        </div>
+      </div>
+      <p class="text-gray-300 text-xs sm:text-sm">
+        Son of political privilege. Violence without consequence—until truth returns. 
+        Part of the powerful trio that believes they are above the law.
+      </p>
+    </div>
+    
+  </div>
+</section>
+
+<!-- CREATIVE TEAM SECTION -->
+<section id="team" class="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 md:px-10 bg-gradient-to-b from-white to-gray-100">
+  <h2 class="text-3xl sm:text-4xl lg:text-5xl text-center mb-4 text-gray-900">Creative Team</h2>
+  <p class="text-center text-gray-600 max-w-2xl mx-auto mb-8 sm:mb-12 text-sm sm:text-base px-4">
+    The visionaries behind ASTITVA
+  </p>
+  
+  <div class="max-w-5xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
+      
+      <div class="lg:col-span-2 bg-white p-6 sm:p-8 rounded-xl shadow-lg border border-amber-200">
+        <div class="flex flex-col sm:flex-row items-start">
+          <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-2 border-amber-500 mb-4 sm:mb-0 sm:mr-6 flex-shrink-0">
+            <img src="ASTITVA images/hero.png" alt="Arjun Nandi" class="w-full h-full object-cover" loading="lazy">
+          </div>
+          <div>
+            <h3 class="text-xl sm:text-2xl text-gray-900 mb-2">Arjun Nandi</h3>
+            <p class="text-lg sm:text-lg text-amber-600 font-bold mb-3">Story Writer & Creator</p>
+            <p class="text-gray-700 text-sm sm:text-base">
+              The creative force behind ASTITVA, Arjun Nandi has crafted a deeply emotional 
+              narrative that explores memory, identity, and justice. His storytelling combines 
+              commercial appeal with profound philosophical depth, creating a unique cinematic 
+              experience that resonates across demographics.
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-gray-900 text-white p-6 sm:p-8 rounded-xl shadow-lg">
+        <h3 class="text-lg sm:text-xl text-amber-300 mb-4">Creative Vision</h3>
+        <ul class="space-y-3">
+          <li class="flex items-start">
+            <span class="text-amber-400 mr-3">•</span>
+            <span class="text-sm sm:text-base">Memory as narrative device</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-amber-400 mr-3">•</span>
+            <span class="text-sm sm:text-base">Emotional realism over melodrama</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-amber-400 mr-3">•</span>
+            <span class="text-sm sm:text-base">Social commentary woven into thriller</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-amber-400 mr-3">•</span>
+            <span class="text-sm sm:text-base">Love story at the core of justice narrative</span>
+          </li>
+        </ul>
+      </div>
+      
+    </div>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mt-6 sm:mt-8">
+      <div class="bg-gray-50 p-4 sm:p-6 rounded-xl border border-gray-200">
+        <h4 class="text-lg sm:text-xl text-gray-900 mb-3">Director Needed</h4>
+        <p class="text-gray-700 text-xs sm:text-sm">
+          Seeking director with experience in emotional thrillers and strong visual storytelling.
+        </p>
+      </div>
+      
+      <div class="bg-gray-50 p-4 sm:p-6 rounded-xl border border-gray-200">
+        <h4 class="text-lg sm:text-xl text-gray-900 mb-3">Casting Director</h4>
+        <p class="text-gray-700 text-xs sm:text-sm">
+          To identify fresh talent and established stars who can embody these complex characters.
+        </p>
+      </div>
+      
+      <div class="bg-gray-50 p-4 sm:p-6 rounded-xl border border-gray-200">
+        <h4 class="text-lg sm:text-xl text-gray-900 mb-3">Cinematographer</h4>
+        <p class="text-gray-700 text-xs sm:text-sm">
+          Visual storyteller who can create atmospheric, memory-driven visual narrative.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BUDGET SECTION -->
+<section id="budget" class="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 md:px-10 bg-gray-900 text-white">
+  <h2 class="text-3xl sm:text-4xl lg:text-5xl text-center mb-4 text-amber-400">Budget Analysis</h2>
+  <p class="text-center text-gray-400 max-w-2xl mx-auto mb-8 sm:mb-12 text-sm sm:text-base px-4">
+    Three scalable production models for ASTITVA (All amounts in Indian Rupees)
+  </p>
+  
+  <div class="max-w-6xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mb-8 sm:mb-12">
+      
+      <!-- Minimum Budget -->
+      <div class="budget-card bg-gradient-to-b from-gray-800 to-gray-900 p-6 sm:p-8 rounded-xl border-t-amber-500">
+        <div class="text-center mb-6">
+          <h3 class="text-xl sm:text-2xl text-amber-300 mb-2">Minimum Budget</h3>
+          <p class="text-3xl sm:text-4xl font-bold">₹3.5 - 5 Crore</p>
+          <p class="text-gray-400 mt-2 text-sm sm:text-base">Lean & Efficient Production</p>
+        </div>
+        
+        <div class="mb-6">
+          <h4 class="text-lg sm:text-lg text-amber-200 mb-3">Key Features</h4>
+          <ul class="space-y-2 text-gray-300 text-sm sm:text-base">
+            <li class="flex items-start">
+              <span class="text-green-400 mr-2">✓</span>
+              <span>Limited shooting locations</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-400 mr-2">✓</span>
+              <span>Emerging talent cast</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-400 mr-2">✓</span>
+              <span>Efficient 45-day schedule</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-400 mr-2">✓</span>
+              <span>Minimal VFX requirements</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="text-lg sm:text-lg text-amber-200 mb-3">Breakdown</h4>
+          <div class="space-y-2 text-sm sm:text-base">
+            <div class="flex justify-between">
+              <span class="text-gray-400">Cast & Crew</span>
+              <span class="text-white">₹1.8 Cr</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-400">Production</span>
+              <span class="text-white">₹1.2 Cr</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-400">Post-Production</span>
+              <span class="text-white">₹0.8 Cr</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-400">Marketing</span>
+              <span class="text-white">₹0.7 Cr</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Medium Budget -->
+      <div class="budget-card bg-gradient-to-b from-gray-800 to-gray-900 p-6 sm:p-8 rounded-xl border-t-blue-500 lg:transform lg:scale-105 relative z-10 shadow-xl lg:shadow-2xl">
+        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+          <span class="bg-blue-500 text-white px-3 sm:px-4 py-1 rounded-full text-xs sm:text-sm font-bold">RECOMMENDED</span>
+        </div>
+        
+        <div class="text-center mb-6">
+          <h3 class="text-xl sm:text-2xl text-blue-300 mb-2">Medium Budget</h3>
+          <p class="text-3xl sm:text-4xl font-bold">₹8 - 12 Crore</p>
+          <p class="text-gray-400 mt-2 text-sm sm:text-base">Balanced Production Scale</p>
+        </div>
+        
+        <div class="mb-6">
+          <h4 class="text-lg sm:text-lg text-blue-200 mb-3">Key Features</h4>
+          <ul class="space-y-2 text-gray-300 text-sm sm:text-base">
+            <li class="flex items-start">
+              <span class="text-green-400 mr-2">✓</span>
+              <span>One established star + emerging talent</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-400 mr-2">✓</span>
+              <span>Multiple shooting locations</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-400 mr-2">✓</span>
+              <span>60-day shooting schedule</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-400 mr-2">✓</span>
+              <span>Moderate VFX for memory sequences</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="text-lg sm:text-lg text-blue-200 mb-3">Breakdown</h4>
+          <div class="space-y-2 text-sm sm:text-base">
+            <div class="flex justify-between">
+              <span class="text-gray-400">Cast & Crew</span>
+              <span class="text-white">₹4.5 Cr</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-400">Production</span>
+              <span class="text-white">₹3.0 Cr</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-400">Post-Production</span>
+              <span class="text-white">₹2.0 Cr</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-400">Marketing</span>
+              <span class="text-white">₹2.5 Cr</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Maximum Budget -->
+      <div class="budget-card bg-gradient-to-b from-gray-800 to-gray-900 p-6 sm:p-8 rounded-xl border-t-purple-500">
+        <div class="text-center mb-6">
+          <h3 class="text-xl sm:text-2xl text-purple-300 mb-2">Maximum Budget</h3>
+          <p class="text-3xl sm:text-4xl font-bold">₹18 - 25 Crore</p>
+          <p class="text-gray-400 mt-2 text-sm sm:text-base">Premium Production Value</p>
+        </div>
+        
+        <div class="mb-6">
+          <h4 class="text-lg sm:text-lg text-purple-200 mb-3">Key Features</h4>
+          <ul class="space-y-2 text-gray-300 text-sm sm:text-base">
+            <li class="flex items-start">
+              <span class="text-green-400 mr-2">✓</span>
+              <span>A-list star cast</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-400 mr-2">✓</span>
+              <span>Pan-India shooting locations</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-400 mr-2">✓</span>
+              <span>90-day shooting schedule</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-400 mr-2">✓</span>
+              <span>High-end VFX and production design</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="text-lg sm:text-lg text-purple-200 mb-3">Breakdown</h4>
+          <div class="space-y-2 text-sm sm:text-base">
+            <div class="flex justify-between">
+              <span class="text-gray-400">Cast & Crew</span>
+              <span class="text-white">₹10 Cr</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-400">Production</span>
+              <span class="text-white">₹7 Cr</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-400">Post-Production</span>
+              <span class="text-white">₹4 Cr</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-400">Marketing</span>
+              <span class="text-white">₹4 Cr</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    
+    <div class="bg-gray-800/50 p-6 sm:p-8 rounded-xl">
+      <h3 class="text-xl sm:text-2xl text-amber-300 mb-4 text-center">ROI Projection</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+        <div class="text-center">
+          <p class="text-2xl sm:text-3xl font-bold text-green-400">3-4x</p>
+          <p class="text-gray-400 text-sm sm:text-base">Minimum Budget ROI</p>
+          <p class="text-xs sm:text-sm text-gray-500 mt-2">(Theatrical + OTT + Satellite)</p>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl sm:text-3xl font-bold text-blue-400">2.5-3x</p>
+          <p class="text-gray-400 text-sm sm:text-base">Medium Budget ROI</p>
+          <p class="text-xs sm:text-sm text-gray-500 mt-2">(Theatrical + OTT + Satellite + Music)</p>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl sm:text-3xl font-bold text-purple-400">2-2.5x</p>
+          <p class="text-gray-400 text-sm sm:text-base">Maximum Budget ROI</p>
+          <p class="text-xs sm:text-sm text-gray-500 mt-2">(Full rights exploitation)</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VISION SECTION -->
+<section id="vision" class="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 md:px-10 bg-gradient-to-b from-white to-gray-100">
+  <h2 class="text-3xl sm:text-4xl lg:text-5xl text-center mb-4 text-gray-900">Director's Vision</h2>
+  <p class="text-center text-gray-600 max-w-2xl mx-auto mb-8 sm:mb-12 text-sm sm:text-base px-4">
+    A grounded, emotionally immersive cinematic experience
+  </p>
+  
+  <div class="max-w-5xl mx-auto">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-12">
+      <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 text-center">
+        <h4 class="text-lg sm:text-xl mb-3 text-gray-900 font-bold">Visual Language</h4>
+        <p class="text-gray-700 text-sm sm:text-base">Dark, atmospheric realism with moments of visual poetry</p>
+      </div>
+      
+      <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 text-center">
+        <h4 class="text-lg sm:text-xl mb-3 text-gray-900 font-bold">Violence Approach</h4>
+        <p class="text-gray-700 text-sm sm:text-base">Implied rather than graphic—emotional impact over shock value</p>
+      </div>
+      
+      <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 text-center">
+        <h4 class="text-lg sm:text-xl mb-3 text-gray-900 font-bold">Memory Narrative</h4>
+        <p class="text-gray-700 text-sm sm:text-base">Fragmented, non-linear storytelling reflecting damaged memory</p>
+      </div>
+      
+      <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 text-center">
+        <h4 class="text-lg sm:text-xl mb-3 text-gray-900 font-bold">Thematic Core</h4>
+        <p class="text-gray-700 text-sm sm:text-base">Love as justice, truth as weapon, memory as battlefield</p>
+      </div>
+    </div>
+    
+    <div class="bg-gradient-to-r from-amber-500 to-amber-600 p-6 sm:p-8 rounded-xl shadow-lg text-center">
+      <p class="text-xl sm:text-2xl text-white font-bold italic">
+        "Some love survives memory loss. Some love survives death. And some love... changes destiny itself."
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- MARKET SECTION -->
+<section id="market" class="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 md:px-10 bg-gray-900 text-white">
+  <h2 class="text-3xl sm:text-4xl lg:text-5xl text-center mb-4 text-amber-400">Market & Audience</h2>
+  <p class="text-center text-gray-400 max-w-2xl mx-auto mb-8 sm:mb-12 text-sm sm:text-base px-4">
+    A commercially viable story with strong emotional resonance across demographics
+  </p>
+  
+  <div class="max-w-5xl mx-auto">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12">
+      
+      <div class="bg-gray-800 p-6 rounded-xl">
+        <h4 class="text-lg sm:text-xl mb-4 text-amber-300 font-bold">Primary Audience</h4>
+        <ul class="space-y-3">
+          <li class="flex items-center text-sm sm:text-base">
+            <span class="w-2 h-2 bg-amber-500 rounded-full mr-3"></span>
+            Youth (18-35) - Thriller & Romance elements
+          </li>
+          <li class="flex items-center text-sm sm:text-base">
+            <span class="w-2 h-2 bg-amber-500 rounded-full mr-3"></span>
+            Family audiences - Emotional core
+          </li>
+          <li class="flex items-center text-sm sm:text-base">
+            <span class="w-2 h-2 bg-amber-500 rounded-full mr-3"></span>
+            Urban & Rural crossover appeal
+          </li>
+        </ul>
+      </div>
+      
+      <div class="bg-gray-800 p-6 rounded-xl">
+        <h4 class="text-lg sm:text-xl mb-4 text-amber-300 font-bold">Market Potential</h4>
+        <ul class="space-y-3">
+          <li class="flex items-center text-sm sm:text-base">
+            <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+            Strong Kannada market base
+          </li>
+          <li class="flex items-center text-sm sm:text-base">
+            <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+            Pan-India OTT appeal
+          </li>
+          <li class="flex items-center text-sm sm:text-base">
+            <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+            International festival potential
+          </li>
+        </ul>
+      </div>
+      
+      <div class="bg-gray-800 p-6 rounded-xl">
+        <h4 class="text-lg sm:text-xl mb-4 text-amber-300 font-bold">Unique Selling Points</h4>
+        <ul class="space-y-3">
+          <li class="flex items-center text-sm sm:text-base">
+            <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+            Memory loss narrative device
+          </li>
+          <li class="flex items-center text-sm sm:text-base">
+            <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+            Social commentary on power
+          </li>
+          <li class="flex items-center text-sm sm:text-base">
+            <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+            Emotional love story at core
+          </li>
+        </ul>
+      </div>
+      
+    </div>
+    
+    <div class="bg-gradient-to-r from-gray-800 to-gray-900 p-6 sm:p-8 rounded-xl border border-amber-900/50">
+      <h3 class="text-xl sm:text-2xl text-amber-300 text-center mb-4">The ASTITVA Promise</h3>
+      <p class="text-gray-300 text-center text-base sm:text-lg">
+        A grounded Kannada emotional thriller with strong mass connect, 
+        youth appeal, and high OTT potential across India—combining the 
+        commercial elements of romance and thriller with the artistic depth 
+        of memory and identity exploration.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ASK SECTION -->
+<section id="ask" class="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 md:px-10 bg-gradient-to-b from-gray-800 to-gray-900 text-white">
+  <div class="max-w-4xl mx-auto text-center">
+    <h2 class="text-3xl sm:text-4xl lg:text-5xl text-amber-400 mb-6">The Ask</h2>
+    <p class="text-lg sm:text-xl mb-8 sm:mb-10 max-w-2xl mx-auto px-4">
+      We seek a production partner to bring this emotionally intense, 
+      socially relevant thriller to the big screen.
+    </p>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12">
+      <div class="bg-gray-800/70 p-6 rounded-xl border border-amber-900/50">
+        <h4 class="text-xl sm:text-2xl text-amber-300 mb-4">What We Bring</h4>
+        <ul class="space-y-3 text-gray-300 text-left text-sm sm:text-base">
+          <li class="flex items-start">
+            <span class="text-amber-400 mr-3">✓</span>
+            Complete screenplay with emotional depth
+          </li>
+          <li class="flex items-start">
+            <span class="text-amber-400 mr-3">✓</span>
+            Director's vision and visual treatment
+          </li>
+          <li class="flex items-start">
+            <span class="text-amber-400 mr-3">✓</span>
+            Character breakdowns and casting notes
+          </li>
+          <li class="flex items-start">
+            <span class="text-amber-400 mr-3">✓</span>
+            Market analysis and audience targeting
+          </li>
+          <li class="flex items-start">
+            <span class="text-amber-400 mr-3">✓</span>
+            Detailed budget planning (3 tiers)
+          </li>
+          <li class="flex items-start">
+            <span class="text-amber-400 mr-3">✓</span>
+            Complete visual storyboard with key scenes
+          </li>
+        </ul>
+      </div>
+      
+      <div class="bg-gray-800/70 p-6 rounded-xl border border-amber-900/50">
+        <h4 class="text-xl sm:text-2xl text-amber-300 mb-4">What We Seek</h4>
+        <ul class="space-y-3 text-gray-300 text-left text-sm sm:text-base">
+          <li class="flex items-start">
+            <span class="text-amber-400 mr-3">•</span>
+            Production funding and partnership
+          </li>
+          <li class="flex items-start">
+            <span class="text-amber-400 mr-3">•</span>
+            Casting support for lead roles
+          </li>
+          <li class="flex items-start">
+            <span class="text-amber-400 mr-3">•</span>
+            Distribution strategy development
+          </li>
+          <li class="flex items-start">
+            <span class="text-amber-400 mr-3">•</span>
+            Marketing and promotional partnership
+          </li>
+          <li class="flex items-start">
+            <span class="text-amber-400 mr-3">•</span>
+            Production expertise and resources
+          </li>
+          <li class="flex items-start">
+            <span class="text-amber-400 mr-3">•</span>
+            OTT and satellite rights negotiation
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="mt-6 sm:mt-8 p-4 sm:p-6 bg-gray-800/50 rounded-xl max-w-2xl mx-auto">
+      <h4 class="text-xl sm:text-2xl text-amber-300 mb-4">Next Steps</h4>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+        <div class="bg-gray-900 p-4 sm:p-6 rounded-lg">
+          <p class="font-bold text-amber-300 text-sm sm:text-base">Phase 1</p>
+          <p class="text-xs sm:text-sm mt-2">Finalize Budget & Production Partner</p>
+        </div>
+        <div class="bg-gray-900 p-4 sm:p-6 rounded-lg">
+          <p class="font-bold text-amber-300 text-sm sm:text-base">Phase 2</p>
+          <p class="text-xs sm:text-sm mt-2">Lock Director, Cast & Crew</p>
+        </div>
+        <div class="bg-gray-900 p-4 sm:p-6 rounded-lg">
+          <p class="font-bold text-amber-300 text-sm sm:text-base">Phase 3</p>
+          <p class="text-xs sm:text-sm mt-2">Pre-production & Shooting Schedule</p>
+        </div>
+        <div class="bg-gray-900 p-4 sm:p-6 rounded-lg">
+          <p class="font-bold text-amber-300 text-sm sm:text-base">Phase 4</p>
+          <p class="text-xs sm:text-sm mt-2">Post-production & Marketing Strategy</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-gray-700">
+      <p class="text-amber-300 text-base sm:text-lg pulse-animation">Let's create something unforgettable together</p>
+      <div class="mt-6 sm:mt-10">
+        <p class="text-xs sm:text-sm text-gray-400">© 2025 ASTITVA – All Rights Reserved</p>
+        <p class="text-xs sm:text-sm text-gray-500 mt-2">Story by Arjun Nandi | "Some love changes destiny itself."</p>
+        <p class="text-xs text-gray-600 mt-4">Contact: arjun.nandi@astitvafilm.com</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+  // Active navigation highlighting
+  const sections = document.querySelectorAll("section");
+  const navLinks = document.querySelectorAll(".nav-link");
+  
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => link.classList.remove("active"));
+        const id = entry.target.id;
+        const activeLink = document.querySelector(`a[href="#${id}"]`);
+        if (activeLink) {
+          activeLink.classList.add("active");
+        }
+      }
+    });
+  }, { threshold: 0.3 });
+  
+  sections.forEach(section => observer.observe(section));
+  
+  // Smooth scrolling for navigation
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const targetId = this.getAttribute('href');
+      if (targetId === '#') return;
+      
+      const targetElement = document.querySelector(targetId);
+      if (targetElement) {
+        const offset = window.innerWidth < 1024 ? 70 : 20;
+        window.scrollTo({
+          top: targetElement.offsetTop - offset,
+          behavior: 'smooth'
+        });
+        
+        // Update active link
+        navLinks.forEach(link => link.classList.remove("active"));
+        this.classList.add("active");
+        
+        // Close mobile menu if open
+        closeMobileMenu();
+      }
+    });
+  });
+  
+  // Image loading handler
+  document.addEventListener('DOMContentLoaded', function() {
+    const images = document.querySelectorAll('img');
+    
+    images.forEach(img => {
+      // Remove loading animation when image loads
+      img.addEventListener('load', function() {
+        this.classList.add('loaded');
+        // Remove loading background from parent if exists
+        if (this.parentElement.classList.contains('story-image-container')) {
+          this.parentElement.style.background = 'none';
+          this.parentElement.style.animation = 'none';
+        }
+        if (this.parentElement.classList.contains('character-img-container')) {
+          this.parentElement.style.background = 'none';
+          this.parentElement.style.animation = 'none';
+        }
+      });
+      
+      // Handle image errors
+      img.addEventListener('error', function() {
+        console.warn('Failed to load image:', this.src);
+        this.style.display = 'none';
+        // Show fallback content
+        if (this.parentElement.classList.contains('character-img-container')) {
+          this.parentElement.innerHTML = '<div class="w-full h-full bg-gray-700 flex items-center justify-center"><span class="text-white font-bold">?</span></div>';
+        }
+        if (this.parentElement.classList.contains('story-image-container')) {
+          this.parentElement.innerHTML = '<div class="w-full h-full bg-gray-700 flex items-center justify-center"><span class="text-white font-bold">Image Not Available</span></div>';
+        }
+      });
+    });
+    
+    // Check if images are already loaded (cached)
+    images.forEach(img => {
+      if (img.complete) {
+        img.dispatchEvent(new Event('load'));
+      }
+    });
+  });
+  
+  // Mobile menu functionality
+  const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+  const mobileMenuClose = document.getElementById('mobileMenuClose');
+  const mobileMenu = document.getElementById('mobileMenu');
+  
+  function openMobileMenu() {
+    if (mobileMenu) {
+      mobileMenu.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      // Focus on close button for accessibility
+      setTimeout(() => {
+        if (mobileMenuClose) mobileMenuClose.focus();
+      }, 100);
+    }
+  }
+  
+  function closeMobileMenu() {
+    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+      mobileMenu.classList.add('hidden');
+      document.body.style.overflow = 'auto';
+      // Return focus to menu toggle button
+      if (mobileMenuToggle) mobileMenuToggle.focus();
+    }
+  }
+  
+  // Mobile menu event listeners
+  if (mobileMenuToggle && mobileMenuClose && mobileMenu) {
+    mobileMenuToggle.addEventListener('click', openMobileMenu);
+    mobileMenuClose.addEventListener('click', closeMobileMenu);
+    
+    // Close menu when clicking outside
+    mobileMenu.addEventListener('click', function(e) {
+      if (e.target === mobileMenu) {
+        closeMobileMenu();
+      }
+    });
+    
+    // Close menu with Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
+        closeMobileMenu();
+      }
+    });
+  }
+  
+  // Close mobile menu when window is resized to desktop size
+  function handleResize() {
+    if (window.innerWidth >= 1024) {
+      closeMobileMenu();
+    }
+  }
+  
+  // Debounced resize handler
+  let resizeTimeout;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(handleResize, 250);
+  });
+  
+  // Animation delay classes
+  const style = document.createElement('style');
+  style.textContent = `
+    .animation-delay-600 { animation-delay: 600ms; }
+    
+    /* Improve focus styles for accessibility */
+    .nav-link:focus, button:focus {
+      outline: 2px solid #F59E0B;
+      outline-offset: 2px;
+    }
+  `;
+  document.head.appendChild(style);
+  
+  // Touch device optimizations
+  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+    document.body.classList.add('touch-device');
+  }
+  
+  // Initialize with proper sidebar state
+  function initializeSidebar() {
+    // Ensure desktop sidebar is properly positioned
+    if (window.innerWidth >= 1024) {
+      // Desktop: sidebar should be visible
+      const sidebar = document.querySelector('nav');
+      if (sidebar) {
+        sidebar.classList.remove('hidden');
+      }
+    }
+  }
+  
+  // Run initialization
+  initializeSidebar();
+</script>
+
+</body>
+</html>
